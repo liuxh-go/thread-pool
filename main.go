@@ -3,24 +3,23 @@ package main
 import (
 	"fmt"
 	"time"
-	"wshhz.com/goThreadPool/threadPool"
+
+	"github.com/liuxh-go/thread-pool/model"
+	pool "github.com/liuxh-go/thread-pool/taskpool"
 )
 
 func main() {
-	dispather := threadPool.NewDispather(20)
+	dispather := pool.NewDispather(5)
 	dispather.Run()
 
 	for i := 0; i < 50; i++ {
-		go func() {
-			dispather.AddTask(test)
-		}()
+		dispather.AddTask(model.NewTask(test, &model.Param{A: int32(i)}))
 	}
 
-	time.Sleep(time.Second * 20)
+	dispather.WaitStop()
 }
 
-func test(dtNow time.Time) {
-	time.Sleep(1 * time.Second)
-
-	fmt.Println(dtNow)
+func test(paramObj *model.Param) {
+	fmt.Println(paramObj.A)
+	time.Sleep(time.Second * 5)
 }

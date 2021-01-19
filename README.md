@@ -1,2 +1,1 @@
-# goThreadPool
-golang实现线程池
+# golang线程池实现
